@@ -3,7 +3,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 
 
-namespace DotnetApi{
+namespace DotnetApi.Data{
 
     class DataContextDapper {
 
@@ -31,5 +31,6 @@ namespace DotnetApi{
             IDbConnection dbConnection = new SqlConnection(_iconfig.GetConnectionString("DefaultConnection"));
             return dbConnection.Execute(sql);
         }    
-    }       
+    }
+       
 }

@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using  DotnetApi.Data;
+using  DotnetApi.Models;
+
 
 namespace DotnetApi.Controllers;
 
@@ -24,13 +27,6 @@ public class UserController : ControllerBase
         String Sql = @"Select * from TutorialAppSchema.Users";
         IEnumerable<User> result = _dapper.LoadDAta<User>(Sql);
         return result;
-        // return Enumerable.Range(1, 5).Select(index => new UserController
-        // {
-        //     Date = DateTime.Now.AddDays(index),
-        //     TemperatureC = Random.Shared.Next(-20, 55),
-        //     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        // })
-        // .ToArray();
     }
     [HttpGet("GetUser/{UserId}")]
     public User Getuser(int UserId)

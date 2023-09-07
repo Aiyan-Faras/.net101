@@ -61,6 +61,14 @@
             "dapper": {
               "target": "Package",
               "version": "[2.0.151, )"
+            },
+            "microsoft.entityframeworkcore": {
+              "target": "Package",
+              "version": "[7.0.10, )"
+            },
+            "microsoft.entityframeworkcore.sqlserver": {
+              "target": "Package",
+              "version": "[7.0.10, )"
             }
           },
           "imports": [
