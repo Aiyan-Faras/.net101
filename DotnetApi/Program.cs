@@ -1,3 +1,5 @@
+using DotnetApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors((options) => {
+builder.Services.AddCors((options) =>
+{
     options.AddPolicy("DevCors", (corsBuilder) =>
     {
         corsBuilder.WithOrigins("http://localhost:4200", "http://localhost:3000", "http://localhost:8000")
@@ -23,7 +26,9 @@ builder.Services.AddCors((options) => {
             .AllowAnyHeader()
             .AllowCredentials();
     });
- });
+});
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -34,7 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else { 
+else
+{
     app.UseCors("ProdCors");
     app.UseHttpsRedirection();
 }

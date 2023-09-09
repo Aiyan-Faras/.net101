@@ -13,21 +13,21 @@ namespace DotnetApi.Controllers;
 
 public class UserEFController : ControllerBase
 {
-    DataContextEF _entityframework;
-
+    //DataContextEF _entityframework; Not gonna use because IUserRepository has DataContextEF object already
+    IUserRepository _userRepository;
     IMapper _mapper;
 
-    public UserEFController(IConfiguration _config)
+    public UserEFController(IConfiguration _config, IUserRepository userRepository)
     {
-        _entityframework = new DataContextEF(_config);
-
+        //_entityframework = new DataContextEF(_config);
+        _userRepository = userRepository;
         _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.CreateMap<UserToAddDto, User>(); }));
     }
 
     [HttpGet("GetUsers")]
     public IEnumerable<User> GetUsers()
     {
-        IEnumerable<User> result = _entityframework.Users.ToList<User>();
+        IEnumerable<User> result = _userRepository.GetUsers(); // _entityframework.Users.ToList<User>();
         return result;
     }
 
@@ -35,7 +35,7 @@ public class UserEFController : ControllerBase
 
     public User GetUser(int UserId)
     {
-        User? user = _entityframework.Users.Where(u => u.UserId == UserId).FirstOrDefault<User>();
+        User? user = _userRepository.GetUser(UserId);  //_entityframework.Users.Where(u => u.UserId == UserId).FirstOrDefault<User>();
         if (user != null)
         {
             return user;
@@ -46,7 +46,7 @@ public class UserEFController : ControllerBase
     [HttpPut("EditUser")]
     public IActionResult EditUser(User user)
     {
-        User? userDb = _entityframework.Users.Where(u => u.UserId == user.UserId).FirstOrDefault<User>();
+        User? userDb = _userRepository.GetUser(user.UserId);  //_entityframework.Users.Where(u => u.UserId == user.UserId).FirstOrDefault<User>();
 
         if (user != null)
         {
@@ -56,7 +56,7 @@ public class UserEFController : ControllerBase
             userDb.Email = user.Email;
             userDb.Gender = user.Gender;
 
-            if (_entityframework.SaveChanges() > 0)
+            if (_userRepository.SaveChanges())
             {
                 return Ok();
             }
@@ -69,11 +69,14 @@ public class UserEFController : ControllerBase
 
     [HttpPost("AddUser")]
 
-    public IActionResult AddUser(UserToAddDto user)
+    public IActionResult AddUser(UserToAddDto userToAdd)
     {
-        User userDb = _mapper.Map<User>(user);
-        _entityframework.Add(userDb);
-        if (_entityframework.SaveChanges() > 0)
+        User userDb = _mapper.Map<User>(userToAdd);
+        //_entityframework.Add(userDb);
+        _userRepository.AddEntity<User>(userDb);
+
+
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
