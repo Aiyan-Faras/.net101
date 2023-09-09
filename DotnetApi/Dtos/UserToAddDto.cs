@@ -1,6 +1,5 @@
-namespace DotNetApi.Dtos; 
-
-public partial class UserToAddDto {
+namespace DotnetApi.Dtos{
+    public partial class UserToAddDto {
     public String? FirstName { get; set; } = "";
     public String? LastName { get; set; } = "";
     public String? Email { get; set; } = "";
@@ -8,3 +7,5 @@ public partial class UserToAddDto {
     public bool Active { get; set; }
 
 }
+}
+
